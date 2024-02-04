@@ -8,3 +8,6 @@
 -conclusions
 -possible future follow ups
 -list of group members and contributions
+
+## website
+https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
