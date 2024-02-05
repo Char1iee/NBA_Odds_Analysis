@@ -66,12 +66,13 @@ moneyLine seems to have extreme outliers on both sides, as it ranges from -13000
 As opponentMoneyLine and moneyLine have the same data points just ordered differently, their distributions are identical.
 
 ### total
-
+Total number of points has an almost normal distribution ranged from 170.5 to 251, since it calculates points from both teams in a game.
 
 ### spread
+The spread has a symmetric distribution because in every game, the magnitude of spread is the same for both teams but the sign is opposite. The data does not have spread to be zero for any entry because it means the game is a tie. However, NBA does not allow tie games.
 
-
-### secondHalfSpread
+### secondHalfTotal
+Just like total, secondHalfTotal has an almost normal distribution ranged from 84 to 125, which is nearly half of the minimum and maximum of total because the points added together from both teams for the first half of the game should be roughly equal to the one from the second half.
 
 
 ## data preprocessing
