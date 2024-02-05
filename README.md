@@ -14,18 +14,18 @@ https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
 
 
 ## data description
-Date: The date on which the game took place
-Season: The year/season during which the game took place
-Team: The team on which the bet is being placed.
-Home/Visitor: Boolean value that represents whether the team on which the bet is placed, is playing at their homeground, or is visiting their opponent.
-Opponent: The team against which our team is playing.
-Score: Our team's final game score
-Opponent Score: The enemy team's final game score.
-Moneyline bet: The simplest type of bet; if your team wins, you win the bet, no matter by how much (margin) they win. The moneyline payouts are an integer representing the payout if a given team wins; negative for favorites "likely" to win, positive for "underdogs" likely to lose. If negative represents how much money you must bet to gain $100, if positive represents how much you will gain on a $100 bet. For example, for teams A and B with moneylines -550 (underdog) and -800 (favorite) respectively: if you bet $100 on A and win you will gain $550, if you bet 800 on B you will gain $100 
+Date: The date on which the game took place\
+Season: The year/season during which the game took place\
+Team: The team on which the bet is being placed.\
+Home/Visitor: Boolean value that represents whether the team on which the bet is placed, is playing at their homeground, or is visiting their opponent.\
+Opponent: The team against which our team is playing.\
+Score: Our team's final game score\
+Opponent Score: The enemy team's final game score.\
+Moneyline bet: The simplest type of bet; if your team wins, you win the bet, no matter by how much (margin) they win. The moneyline payouts are an integer representing the payout if a given team wins; negative for favorites "likely" to win, positive for "underdogs" likely to lose. If negative represents how much money you must bet to gain $100, if positive represents how much you will gain on a $100 bet. For example, for teams A and B with moneylines -550 (underdog) and -800 (favorite) respectively: if you bet $100 on A and win you will gain $550, if you bet 800 on B you will gain $100\
 
-total: Total points bet; Also known as over/under bet; this involves predicting if the total points socred by both teams will be over or under the projected point total, which is set by the sportsbook; assume the projected point total is 212, and you bet the final total points will be over the projected point total. If the actual points total after the game is higher than 212, then you win. If it is lower than 212, then you lose. If the actual score is equal to 212, then the bet is refunded.
-spread: Point spread bet; This bet requires a team to win or lose by a specific number of points, which is set by the sportsbook. For example, if the spread is +3 for Los Angeles Lakers in a game that Lakers vs Clippers, and you bet Lakers will win, it means that you are betting on the chance that Lakers will win the game by at least 4 points more than Clippers
-secondHalfTotal: 
+total: Total points bet; Also known as over/under bet; this involves predicting if the total points socred by both teams will be over or under the projected point total, which is set by the sportsbook; assume the projected point total is 212, and you bet the final total points will be over the projected point total. If the actual points total after the game is higher than 212, then you win. If it is lower than 212, then you lose. If the actual score is equal to 212, then the bet is refunded.\
+spread: Point spread bet; This bet requires a team to win or lose by a specific number of points, which is set by the sportsbook. For example, if the spread is +3 for Los Angeles Lakers in a game that Lakers vs Clippers, Clippers will have the spread of -3 in this game. If you bet on Lakers, it means that you are betting on the chance that Lakers will win the game by at least 4 points more than Clippers. If Lakers actually win Clippers with at least 4 more points, you win the bet. If Lakers win Clippers with 2 points for fewer or even lose the game, you lose the bet. If Lakers win Clippers with eactly 3 more points, the bet is refunded. On the contrary, if you bet on Clippers, it means you are betting on the chance that Clippers will lose no more than 3 points. Therefore, if Clippers lose Lakers with no more than 2 points or even win Lakers, you win the bet. If Clippers lose Lakers with at least 4 points, you lose the bet.\
+secondHalfTotal: The same as total except that this bet only calculates points in the second half of the game.\
 
 ## Data distributions - interpretation:
 
