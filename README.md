@@ -1,4 +1,4 @@
-# cse151a_project
+# NBA_Odds_Analysis
 -link to notebook
 -story behind data, previous work
 -motivations behind the project
