@@ -76,5 +76,5 @@ Just like total, secondHalfTotal has an almost normal distribution ranged from 8
 
 
 ## data preprocessing
-To preprocess the data, we plan to one-hot encode the home/visitor column to make the data numerical, and convert the data values to be integers instead of objects. Based on our exploratory analysis, we found that the data in ______ column is roughly normal, and may benefit from standardization.
+To preprocess the data, we plan to one-hot encode the home/visitor column to make the data numerical, and convert the data values to be integers instead of objects. Based on our exploratory analysis, we found that the data in ______ column is roughly normal, and may benefit from standardization. Additionally, we may need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game. 
 
