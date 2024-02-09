@@ -76,7 +76,7 @@ Just like total, secondHalfTotal has an almost normal distribution ranged from 8
 
 
 ## data preprocessing
-To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We plan to experiment with two datasets: one using a label encoder, and another with one-hot encoding to represent the teams. We also one-hot encoded the home/visitor column to keep the data numerical.
+To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We plan to experiment with two datasets: one using a label encoder, and another with one-hot encoding to represent the teams, and seeing if either method will affect our model's performance. We also one-hot encoded the home/visitor column to keep the data numerical.
 
 Based on the pairplot generated in exploratory analysis, we found that the data in the scores (and opponent scores) columns looks roughly normal, and may benefit from standardization. We will be using Q-Q plots to analyze how normally distributed each of our columns is to determine which features to standardize.
 
