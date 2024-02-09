@@ -76,6 +76,9 @@ Just like total, secondHalfTotal has an almost normal distribution ranged from 8
 
 
 ## data preprocessing
-To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We begin by experimenting with a label encoder, and comparing the results with a one-hot encoded dataset for the teams. Based on the pairplot generated in exploratory analysis, we found that the data in scores (and opponent scores) column is roughly normal, and may benefit from standardization. Additionally, applying a min-max normalization would be helpful, since our numerical values are scaled differently. We also need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game. We decided to drop the opponent money line column since th
+To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We plan to experiment with two datasets: one using a label encoder, and another with one-hot encoding to represent the teams. We also one-hot encoded the home/visitor column to keep the data numerical.
 
-We will be using Q-Q plots to analyze how normally distributed each of our columns is.
+Based on the pairplot generated in exploratory analysis, we found that the data in the scores (and opponent scores) columns looks roughly normal, and may benefit from standardization. We will be using Q-Q plots to analyze how normally distributed each of our columns is to determine which features to standardize.
+
+For the rest of the numerical data, we applied a min-max normalization as our data is scaled differently depending on the feature. 
+We discussed whether we need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game, but ultimately decided to keep them so our dataset isn't biased toward home or away games. Instead, we decided to drop the opponent money line column since this data will be redundant by keeping the original amount of observations.
