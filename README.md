@@ -22,7 +22,7 @@ The date on which the game took place
 The year/season during which the game took place
 
 ### team:
-The team on which the bet is being placed
+The team on which the bet is being placed. There are 32 unique teams.
 
 ### home/visitor:
 Boolean value that represents whether the team on which the bet is placed, is playing at their homeground, or is visiting their opponent.
@@ -76,5 +76,6 @@ Just like total, secondHalfTotal has an almost normal distribution ranged from 8
 
 
 ## data preprocessing
-To preprocess the data, we plan to one-hot encode the home/visitor column to make the data numerical, and convert the data values to be integers instead of objects. Based on our exploratory analysis, we found that the data in ______ column is roughly normal, and may benefit from standardization. Additionally, we may need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game. 
+To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We begin by experimenting with a label encoder, and comparing the results with a one-hot encoded dataset for the teams. Based on the pairplot generated in exploratory analysis, we found that the data in scores (and opponent scores) column is roughly normal, and may benefit from standardization. Additionally, applying a min-max normalization would be helpful, since our numerical values are scaled differently. We also need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game. We decided to drop the opponent money line column since th
 
+We will be using Q-Q plots to analyze how normally distributed each of our columns is.
