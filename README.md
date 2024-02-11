@@ -75,10 +75,25 @@ The spread has a symmetric distribution because in every game, the magnitude of 
 Just like total, secondHalfTotal has an almost normal distribution ranged from 84 to 125, which is nearly half of the minimum and maximum of total because the points added together from both teams for the first half of the game should be roughly equal to the one from the second half.
 
 
-## data preprocessing
+## Data Preprocessing
+
+### Encoding
 To preprocess the data, we plan to encode the home/visitor column to convert the data values to be integers instead of objects. We plan to experiment with two datasets: one using a label encoder, and another with one-hot encoding to represent the teams, and seeing if either method will affect our model's performance. We also one-hot encoded the home/visitor column to keep the data numerical.
 
-Based on the pairplot generated in exploratory analysis, we found that the data in the scores (and opponent scores) columns looks roughly normal, and may benefit from standardization. We will be using Q-Q plots to analyze how normally distributed each of our columns is to determine which features to standardize.
+### Normalization and Standardization
+Based on the pairplot generated in exploratory analysis, we found that the data in the scores (and opponent scores) columns looks roughly normal, and may benefit from standardization. We used the Shapiro-Wilk test to confirm that the scores and opponent scores were indeed normally distributed, prompting us to standardize those columns. Because the Shapiro-Wilk test pvalues are inaccurate for more than 5000 samples and we have 37k samples, we randomly sampled 1000 data points from each column to perform the Shapiro-Wilk test. For the rest of the numerical data, we applied a min-max normalization as our data is scaled differently depending on the feature. 
 
-For the rest of the numerical data, we applied a min-max normalization as our data is scaled differently depending on the feature. 
-We discussed whether we need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game, but ultimately decided to keep them so our dataset isn't biased toward home or away games. Instead, we decided to drop the opponent money line column since this data will be redundant by keeping the original amount of observations.
+### Feature Selection
+We discussed whether we need to filter out duplicate games, since there are two entries: one for the home team and one for the away team for each game, but ultimately decided to keep them so our dataset isn't biased toward home or away games. Additionally, we added features from the existing data that may affect our predictions, such as win rate for the teams, and the win rate against the specific opponent. For the latter, there is minimal data between two teams in a season, so we will see if the added feature benefits our predictions.
+
+### Additional Columns
+We created the following additional columns based on the given dataset: win, year, month, day, day_of_week, games_played, cumulative_wins, cumulative_win_rate, cumulative_score, and average_score. The win column represents whether team or opponent won the game. The year, month, day, and day_of_week columns help represent the date in a more manageable numerical format. The games_played, cumulative_wins, cumulative_win_rate, cumulative_score, and average_score columns inform the model as to the team's performance in the current season.
+
+### Prediction targets and inputs
+The input columns we plan to feed our model are: 'date', 'season', 'team', 'home/visitor', 'opponent', 'day', 'day_of_week', 
+              'games_played', 'cumulative_wins', 'cumulative_win_rate', 'cumulative_score', 'average_score', 
+              'opponent_games_played', 'opponent_cumulative_wins', 'opponent_win_rate',
+              as these are all publicly available before the moneyLine is announced.
+
+The targets we plan to have our model predict are: 'moneyLine', 'total', 'spread', 'secondHalfTotal', 'score', 'winner',
+as these will all be important aspects of betting that occur for the given game.
