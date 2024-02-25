@@ -97,3 +97,15 @@ The input columns we plan to feed our model are: 'date', 'season', 'team', 'home
 
 The targets we plan to have our model predict are: 'moneyLine', 'total', 'spread', 'secondHalfTotal', 'score', 'winner',
 as these will all be important aspects of betting that occur for the given game.
+
+### Next 2 Models
+One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
+series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
+of each team, which could then be used for the final prediction step. The benefit of doing this over a traditional NN is that it will
+be better equipped to handle how each team changes over time, and be better able to predict how that team will be for a timestep that
+hasn't been seen before, which is what our current test set is composed of.
+
+The other model that we want to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model shows promise
+for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base
+ARIMA because we suspect that teams will have verying performance based on seasonal changes (not the season variable but like month
+or day of week for example), which we hope this variant will be able to capture.
