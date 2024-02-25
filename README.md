@@ -109,3 +109,11 @@ The other model that we want to try using is an SARIMA (Seasonal Auto-Regressive
 for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base
 ARIMA because we suspect that teams will have verying performance based on seasonal changes (not the season variable but like month
 or day of week for example), which we hope this variant will be able to capture.
+
+
+### Performance of our model:
+We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
+
+
+### Where does our model fit in the fitting graph:
+Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
