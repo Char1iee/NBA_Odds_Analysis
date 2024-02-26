@@ -117,6 +117,7 @@ We use MSE(mean squared error) as the loss function for our model since we are p
 
 ### Where does our model fit in the fitting graph:
 Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
+![Train_Val_Loss](train_val_loss.jpg)
 
 
 ### Conclusion
