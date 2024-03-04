@@ -98,6 +98,8 @@ The input columns we plan to feed our model are: 'date', 'season', 'team', 'home
 The targets we plan to have our model predict are: 'moneyLine', 'total', 'spread', 'secondHalfTotal', 'score', 'winner',
 as these will all be important aspects of betting that occur for the given game.
 
+## Models
+
 ### Next 2 Models
 One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
 series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
@@ -110,16 +112,43 @@ for the same reason as the RNN: it is built to account for changes/constants ove
 ARIMA because we suspect that teams will have verying performance based on seasonal changes (not the season variable but like month
 or day of week for example), which we hope this variant will be able to capture.
 
+### Model 1: Neural Network
 
-### Performance of our model:
+#### Performance of our 1st model:
 We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
 
 
-### Where does our model fit in the fitting graph:
+#### Where does our model fit in the fitting graph:
 Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
 
 ![Train_Val_Loss](train_val_loss.png)
 
 
-### Conclusion
+#### Conclusion
 Our first model was kept pretty simple. We used two layers with the relu activation function in order to avoid vanishing gradients. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
+
+### Model 2: Recurrent Neural Network
+For this model, we essentially use an RNN to generate a rich encoding of each team in the current game by passing in the details and results of their last k games. We then use the rich encodings of the home and opponent teams as the inputs for a few dense layers, which gives us our final predictions.
+
+#### Evaluation of data, labels, and loss.
+While our labels and loss function still worked well for our second model, we had to somewhat change our data to take full advantage of the RNN's capability to work with time-series data. Essentially, instead of recording the current game's details (such as day of week, month, and one-hot encodings of which teams are playing), we pass in the details of the last k games played for each team, including the result of that game (so for a single game, we might have: day of week, one-hot encoding of opponent team, final score). This allows the RNN to find out how well the team has done recently, and use that to predict how well each team will do in the current game.
+
+#### Training vs Test Error
+Our final training error (MSE) was 0.1245, and our final test error was 0.1652. The test error is higher than the training error as expected, since it is much more likely for the model to perform better with data that it has seen before. Compared to model 1's training error of 0.1871 and test error of 0.2675, model 2 performed significantly better. Out of the 5 prediction targets, moneyLine again had the lowest error (train, val, and test) while score again had the highest error (train, val, and test). This is most likely due to the same reasons as before, where score was standardized rather than normalized, making it have a much larger range, and moneyLine is both more predictable and more clustered around the center.
+
+#### Fitting graph
+Even after running for 100 epochs, our model still didn't overfit, although it did appear to have stopped improving in terms of validation loss. Rather than having validation loss go back up, our model's validation loss just flatlined towards the end. Compared to the first model, which did start overfitting in the last few epochs (validation loss going up while training loss went down), our 2nd model did not overfit.
+
+![Train_Val_Loss](model2_history.png)
+
+#### Hyperparameter tuning, K-fold cross-validation, etc.
+#TODO
+
+#### Next model
+For our next model, we plan on using a Convolutional Neural Network that convolves over the same feature for the previous k games played by each team. This model will function somewhat similarly to the RNN, using the past k games for each team to create some kind of rich encoding of that team's recent history, and using those encodings to make our final predictions through a few dense layers. We switched to this model instead of the SARIMA model that we were planning on using because ultimately we wanted to explore models that were more relevant to this course, and because we believed that the Convolutional layers might be able to capture unique patterns that may not simply be a moving average (which a SARIMA would rely on).
+
+#### Analysis of train loss, val loss, and test loss
+For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, train loss was less than test loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
+
+#### Conclusion
+Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1652 was also significantly less than model 1's test error of 0.2675. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers/increasing sequence length. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
