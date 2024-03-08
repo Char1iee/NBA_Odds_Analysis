@@ -1,10 +1,10 @@
 # Introduction
 
-In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and therefore correlate the value of those bets to public sentiment. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
+In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and thereby get an idea of which team is favored in a given game and to what extent. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
 
 ## Source
 For our project we will use this kaggle repo as our data source:
-https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
+[Dataset Link](https://www.kaggle.com/datasets/christophertreasure/nba-odds-data)
 
 # NBA_Odds_Analysis
 -link to notebook
@@ -64,10 +64,12 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 
 ![Heat Map](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/heatmap.png)
+
 **Fig. 1 | Heat map.** Heat map of our variables to examine correlation between pairs. Generated using seaborn library. Highly correlated pairs were total/second-half total, moneyLine/opponent moneyline, and spread/moneylines. 
 
 
 ![Pair Plot](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/pairplot.png)
+
 **Fig. 2 | Pair Plot.** Pair plot of our variables to give us a sense of how all of our data's features are distributed. Generated using seaborn library. Useful since we have more than 5,000 data points, after which point Shapiro-Wilk test loses accuracy and a visual guide was helpful. Led us to subsample our data points (picked 1000 points randomly) to calculate data distribution, as some features were visibly normal but Shapiro-Wilk test failed initially. Picked Kernel Density Estimation for the diagonal over a histogram for smoothing. 
 
 ## Data Preprocessing
@@ -97,6 +99,7 @@ The targets we had our model predict were: 'moneyLine', 'total', 'spread', 'seco
 as these will all be important aspects of betting that occur for the given game.
 
 ![image](https://github.com/Char1iee/NBA_Odds_Analysis/assets/86756673/deb18a34-3e59-42c8-a6b2-9bd73c7565c5)
+
 **Fig. 3 | Sample Output.** This is an example output of our model2. It contains predictions for all of our targets.
 
 ## Models
