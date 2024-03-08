@@ -110,6 +110,20 @@ hasn't been seen before, which is what our current test set is composed of.
 
 ### Model 1: Neural Network
 
+We chose a neural network because it can calculate relationships between features easily. A neural network is the most basic and serves as a "control", and later can serve as a foundation for our RNN. We decided 
+
+decisions:
+-activation functions
+-number of units
+-types of layers 
+-patience level 2
+-epochs
+-test size
+-Chose Adam optimzer because from our experience (trying different optimizers in our homework), it gives us the best performance. We also looked online and Adam consistently outperformed other optimizers [Source](https://towardsdatascience.com/optimizers-for-training-neural-network-59450d71caf6)
+  
+-MSE loss
+
+
 #### Performance of our 1st model:
 We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
 
