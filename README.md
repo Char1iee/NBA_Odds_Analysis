@@ -163,8 +163,57 @@ For all predictions targets except moneyLine, our train loss was less than our v
 #### Conclusion
 Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2675. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
-### Discussion
+#### Train, Val, and Test prediction analysis
+#TODO
 
+### Model 3: Convolutional Neural Network
+For this model, we used the same input data as we did for the recurrent neural network - namely the past k games played by each participating team. A 1D convolution was performed for each feature over these k games to detect patterns in a given feature in the last k games, then this data was passed into a few dense layers to generate our final predictions.
+
+#### Evaluation of data, labels, and loss.
+
+
+#### Training vs Test Error
+
+
+#### Fitting graph
+
+
+#### Hyperparameter tuning, K-fold cross-validation, etc.
+Hyperparameter tuning (via 20 randomized search trials) yielded very surprising results on this model. More specifically, there was an incredibly high variation in validation loss across different sets of hyperparameters. This may be due to the fact our model only captures the dataset well with certain ranges of hyperparameters, as otherwise it would be too unnecessarily complex to capture the relevant data without overfitting. The final set of hyperparameters had the model consider only the last 3 games for each team, and only convolve across every pair of consectuive games (kernel_size = 2). The convolutional layer used 32 filters and a tanh activation function, while both dense layers had a linear activation function. The training MSE was 0.1262 and the validation MSE was 0.1417, which were both lower than the untuned training loss of 0.1794 and validation loss of 0.2180. Again, this drastic improvement highlights how much hyperparameter tuning did for the CNN model. Same as for the RNN, we did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
+
+#### Next model
+
+
+#### Analysis of train loss, val loss, and test loss
+
+
+#### Conclusion
+
+#### Train, Val, and Test prediction analysis
+Training prediction:
+
+<img width="536" alt="Screenshot 2024-03-07 at 11 37 45 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/d2b578be-0fcc-4826-97c7-2b238b9504f7">
+
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1 away (1 standard deviation).
+
+Validation prediction:
+
+<img width="539" alt="Screenshot 2024-03-07 at 11 40 59 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/f9bcf325-5a3b-47ef-ba94-49015b44615f">
+
+Here we see that total is the best predicted (0.02 away), while moneyLine, spread, and secondHalfTotal are the second best predicted (0.04 away), and score is again the least well predicted (0.66 stds away)
+
+Test prediction:
+
+<img width="528" alt="Screenshot 2024-03-07 at 11 43 24 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/02c713fb-c81d-4dd0-9dde-9e47223380df">
+
+For this test prediction, both moneyLine and spread are extremely close to the actual values (<0.01 away), while total and secondHalfTotal are also quite well predicted (0.02 and 0.08 off respectively). Score is actually somewhat close to the actual value this time at <0.3 away.
+
+Analysis:
+
+Overall, it is clear that moneyLine is consistently well predicted, and so are spread, total, and secondHalfTotal, which is consistent with the low MSEs that we calculated. Score, on the other hand, seems to be consistently close to 0, which by definition of standardization, is the mean of the data. This suggests that our model might lack variance when predicting score, choosing instead to predict the 'safe' values which are close to the center of the data. This further explains why the MSE of score was so much higher than the other prediction targets even considering their different scaling techniques. The individual samples that we selected this time from the training, valid, and test sets did not necessarily reflect how well the sets were predicted overall (since we only looked at so few samples), but the general relationship between how well each of our prediction targets were predicted did manifest.
+
+
+### Discussion
 Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but like month or day of week for example), which we hoped this variant would be able to capture. We instead chose to do a CNN to focus on the models discussed in-class
 
 ### Collaboration
