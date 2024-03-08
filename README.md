@@ -135,6 +135,7 @@ Our first model was kept pretty simple. We used two layers with the relu activat
 #### Fitting graph
 
 #### Hyperparameter tuning, K-fold cross-validation, etc.
+Peter
 
 #### Next model
 
@@ -143,7 +144,7 @@ Our first model was kept pretty simple. We used two layers with the relu activat
 #### Conclusion
 
 #### Predictions Analysis
-
+Peter
 
 ### Discussion
 
