@@ -170,7 +170,7 @@ Overall, the errors for each of our prediction targets were lower than what we h
 For this model, we used the same input data as we did for the recurrent neural network - namely the past k games played by each participating team. A 1D convolution was performed for each feature over these k games to detect patterns in a given feature in the last k games, then this data was passed into a few dense layers to generate our final predictions.
 
 #### Evaluation of data, labels, and loss.
-For the convolutional neural network, our loss and labels were the same as the RNN model, as it had worked well in the past and we wanted to keep our data consistent. However, we had to reshape our data in order to feed it into the CNN and account for the batch size arguments in, which included reshaping the team and opponent matrices.
+For the convolutional neural network, our loss and labels were the same as the RNN model, as it had worked well in the past and we wanted to keep our data consistent. However, we had to reshape our data in order to feed it into the CNN, which included transposing the team and opponent matrices.
 
 #### Training vs Test Error
 
