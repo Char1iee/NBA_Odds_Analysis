@@ -249,3 +249,5 @@ Since the money line makes up a large part of the sports betting process, we can
 Peter Gao: Managed meetings, programmed/trained models 2 and 3, wrote most of model 2 write-up.
 
 Shree Venkatesh: Selected the dataset, wrote most of the Data descriptions and Data distribution - Interpretation, worked on data preprocessing, mainly in feature selection.
+
+Chris Mo: Wrote preliminary write ups for preprocessing, prepared the final submission write up (organized readme entries from previous milestones, wrote the conclusion). Also started the preliminary model for model 3 (CNN) and provided programming insight for our first model (ANN).
