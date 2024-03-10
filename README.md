@@ -154,7 +154,7 @@ Overall, the errors for each of our prediction targets were lower than what we h
 
 ### Discussion
 
-Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but like month or day of week for example), which we hoped this variant would be able to capture. We instead chose to do a CNN to focus on the models discussed in-class
+Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but like month or day of week for example), which we hoped this variant would be able to capture. We instead chose to do a CNN to focus on the models discussed in-class, and because a convolutional neural network may be able to detect different patterns and behaviors that a moving average would not.
 
 ### Collaboration
 
