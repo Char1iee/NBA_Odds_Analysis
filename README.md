@@ -170,6 +170,25 @@ For all predictions targets except moneyLine, our train loss was less than our v
 
 Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
+##### Train, Val, and Test prediction analysis
+Training prediction:
+
+![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
+
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation).
+
+Validation prediction:
+
+![cnn_pred_val](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/2b37056d-d9ca-419a-b97f-a4dcf0ae5351)
+
+Here we see that secondHalfTotal is the best predicted (0.0003 away), while moneyLine and total are the second best predicted (0.04 away), and spread is the third best predicted (0.2 away). Score is again the least well predicted (0.75 stds away).
+
+Test prediction:
+
+![cnn_pred_test](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/6c106796-7a19-4d8e-9374-82a767080dec)
+
+For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time at <0.3 away.
+
 #### Next model
 For our next model, we plan on using a Convolutional Neural Network that convolves over the same feature for the previous k games played by each team. This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We were interested in the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but month or day of weekm for example), which we hoped this variant would be able to capture. This model will function somewhat similarly to the RNN, using the past k games for each team to create some kind of rich encoding of that team's recent history, and using those encodings to make our final predictions through a few dense layers. We switched to a CNN instead of the SARIMA model that we were planning on using because ultimately we wanted to explore models that were more relevant to this course, and because we believed that the Convolutional layers might be able to capture unique patterns that may not simply be a moving average (which a SARIMA would rely on).
 
