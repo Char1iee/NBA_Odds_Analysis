@@ -247,3 +247,5 @@ Since the money line makes up a large part of the sports betting process, we can
 ### Collaboration
 
 Peter Gao: Managed meetings, programmed/trained models 2 and 3, wrote most of model 2 write-up.
+
+Shree Venkatesh: Selected the dataset, wrote most of the Data descriptions and Data distribution - Interpretation, worked on data preprocessing, mainly in feature selection.
