@@ -140,7 +140,7 @@ Training prediction:
 
 ![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
 
-For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation).
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation away).
 
 Validation prediction:
 
@@ -152,7 +152,7 @@ Test prediction:
 
 ![cnn_pred_test](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/6c106796-7a19-4d8e-9374-82a767080dec)
 
-For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time at <0.3 away.
+For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time (<0.3 stds away).
 
 #### Next model
 
