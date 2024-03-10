@@ -149,14 +149,28 @@ For our next model, we plan on using a Convolutional Neural Network that convolv
 #### Analysis of train loss, val loss, and test loss
 For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, train loss was less than test loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
 
+##### Train, Val, and Test prediction analysis
+Training prediction:
+
+![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
+
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation).
+
+Validation prediction:
+
+![cnn_pred_val](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/2b37056d-d9ca-419a-b97f-a4dcf0ae5351)
+
+Here we see that secondHalfTotal is the best predicted (0.0003 away), while moneyLine and total are the second best predicted (0.04 away), and spread is the third best predicted (0.2 away). Score is again the least well predicted (0.75 stds away).
+
+Test prediction:
+
+![cnn_pred_test](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/6c106796-7a19-4d8e-9374-82a767080dec)
+
+For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time at <0.3 away.
+
 #### Conclusion
 Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
 ### Discussion
 
 Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but like month or day of week for example), which we hoped this variant would be able to capture. We instead chose to do a CNN to focus on the models discussed in-class, and because a convolutional neural network may be able to detect different patterns and behaviors that a moving average would not.
-
-### Collaboration
-
-### Conclusion
-
