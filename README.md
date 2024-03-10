@@ -173,7 +173,7 @@ For this model, we used the same input data as we did for the recurrent neural n
 For the convolutional neural network, our loss and labels were the same as the RNN model, as it had worked well in the past and we wanted to keep our data consistent. However, we had to reshape our data in order to feed it into the CNN, which included transposing the team and opponent matrices.
 
 #### Training vs Test Error
-
+Our final average training mse was 0.1262 and our final average test mse was 0.1604. The test error is higher than the training error which is expected because the model tends to perform better on data that it is familiar with. This model's error values were much closer to model 2's error values than model 1's. Once again moneyline had the lowest error for each data set and score had a significantly higher error than the other outputs. This is likely due to the same reasons that we sited prior where score was standardized rather than normalized and thus has a larger range and moneyline is more predictable and more clustered around the center. While the final average training mse of model 3 is 0.1262 and the average of model 2 is 0.1871, it is notable to remove the outlier (score) from the mean. When removed, the average train error of model 3 is 0.003763 and the average train error of model 2 is 0.005597. Likewise, the final average testing mse of model 3 is 0.1604 and the average of model 2 is 0.1595, but, when the outlier is removed from the average, the average test error of model 3 is 0.005657 and the average test error of model 2 is 0.006987.
 
 #### Fitting graph
 
