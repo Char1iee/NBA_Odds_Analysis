@@ -188,6 +188,8 @@ Hyperparameter tuning (via 20 randomized search trials) yielded very surprising 
 
 
 #### Conclusion
+Overall, the CNN model surpassed the previous two models, demonstrating low error rates and high accuracy in predicting most features. It recorded a training MSE of 0.1262 and a validation MSE of 0.1417, marking a significant improvement over both the first and second models. For this model, we applied a convolution operation to each feature column of the team and opponent data individually which leverages the power of convolutional layers to process multiple features in a more efficient way. To improve this model, we may apply k-fold cross-validation into our model evaluation process, which can significantly enhance the reliability of our performance metrics.
+
 
 #### Train, Val, and Test prediction analysis
 Training prediction:
