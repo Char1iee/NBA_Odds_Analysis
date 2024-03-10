@@ -95,24 +95,22 @@ as these will all be important aspects of betting that occur for the given game.
 
 ## Models
 
-### Next 2 Models
+### Model 1: Neural Network
+
+#### Performance of our 1st model:
+We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
+
+#### Next 2 Models
 One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
 series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
 of each team, which could then be used for the final prediction step. The benefit of doing this over a traditional NN is that it will
 be better equipped to handle how each team changes over time, and be better able to predict how that team will be for a timestep that
 hasn't been seen before, which is what our current test set is composed of.
 
-### Model 1: Neural Network
-
-#### Performance of our 1st model:
-We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
-
-
 #### Where does our model fit in the fitting graph:
 Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
 
 ![Train_Val_Loss](train_val_loss.png)
-
 
 #### Conclusion
 Our first model was kept pretty simple. We used two layers with the relu activation function in order to avoid vanishing gradients. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
