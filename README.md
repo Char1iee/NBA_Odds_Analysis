@@ -105,6 +105,25 @@ Based on the plot of training loss and validation loss versus epochs, our model 
 
 ![Train_Val_Loss](train_val_loss.png)
 
+#### Train, Val, and Test prediction analysis
+Training prediction:
+
+<img width="533" alt="image" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/5f49b86a-fc72-434a-a732-8c1650e78229">
+
+For the training prediction, we see that spread was well predicted (within 0.05 of the actual value), moneyLine was the second best at around 0.1 away, total and secondHalfTotal were somewhat less well predicted (around 0.16 off from the true values), and score was the least well predicted, being almost 1.13 away (1.13 standard deviations away).
+
+Validation prediction:
+
+<img width="532" alt="image" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/6435e5b2-b03d-4d53-848d-979aa6834954">
+
+Here we see that moneyLine is is the best predicted (0.02 away), while secondHalfTotal was the second best predicted (0.04 away), total was the third best at 0.07 away, and spread is the fourth best predicted (0.1 away). Score is again the least well predicted (1 std away).
+
+Test prediction:
+
+<img width="528" alt="image" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/8bb86a8d-4b23-4453-82fe-18c56ec4c74d">
+
+For this test prediction, moneyLine is extremely close to the actual values (~0.01 away). secondHalfTotal is somewhat close (~0.1 away), while spread is 0.12 away and total is 0.18 away. Score is actually somewhat close to the actual value this time (<0.3 stds away).
+
 #### Next 2 Models
 One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
 series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
