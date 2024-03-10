@@ -245,3 +245,5 @@ Throughout this project, we learned that our RNN and CNN performance drastically
 Since the money line makes up a large part of the sports betting process, we can try to apply a similar framework to other sports and leagues, and see if our hypothesis holds or if the money line's impact varies by sport. 
 
 ### Collaboration
+
+Peter Gao: Managed meetings, programmed/trained models 2 and 3, wrote most of model 2 write-up.
