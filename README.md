@@ -1,21 +1,12 @@
-# Introduction
+# NBA_Odds_Analysis
+
+## Introduction
 
 In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and thereby get an idea of which team is favored in a given game and to what extent. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
 
 ## Source
 For our project we will use this kaggle repo as our data source:
 [Dataset Link](https://www.kaggle.com/datasets/christophertreasure/nba-odds-data)
-
-# NBA_Odds_Analysis
--link to notebook
--story behind data, previous work
--motivations behind the project
--objectives of the project
--broader impact of the project
--how we preprocessed (choosing model, over/underfitting, etc)
--conclusions
--possible future follow ups
--list of group members and contributions
 
 ## data description
 
