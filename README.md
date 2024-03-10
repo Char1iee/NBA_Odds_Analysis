@@ -217,8 +217,19 @@ Test prediction:
 For this test prediction, both moneyLine and spread are extremely close to the actual values (<0.01 away), while total and secondHalfTotal are also quite well predicted (0.02 and 0.08 off respectively). Score is actually somewhat close to the actual value this time at <0.3 away.
 
 
-### Collaboration
-
-
 ### Conclusion
 
+- preprocessing: further feature expansion (polynomial)
+- model selection: maybe one with recurrent and conv layers?
+- more recurrent layers in RNN rather than 1
+- LSTMs and transformers instead of recurrent layer
+- more extensive HP tuning, ideally testing ~100 model variations
+- more models (potentially SARIMA)
+To improve our results, we can pursue further feature expansion by looking to incorporate polynomial features. With more time, we can also consider testing a few other models, like the SARIMA model mentioned above and 
+
+- important feature that improved model performance in RNN and CNN: passing in data from previous games
+- exciting to see CNN appplied to non-image data
+- from intro: we achieved our initial goal by predicting the money line well
+- 
+
+### Collaboration
