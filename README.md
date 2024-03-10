@@ -68,10 +68,12 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 
 ![Heat Map](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/heatmap.png)
+
 **Fig. 1 | Heat map.** Heat map of our variables to examine correlation between pairs. Generated using seaborn library. Highly correlated pairs were total/second-half total, moneyLine/opponent moneyline, and spread/moneylines. 
 
 
 ![Pair Plot](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/pairplot.png)
+
 **Fig. 2 | Pair Plot.** Pair plot of our variables to give us a sense of how all of our data's features are distributed. Generated using seaborn library. Useful since we have more than 5,000 data points, after which point Shapiro-Wilk test loses accuracy and a visual guide was helpful. Led us to subsample our data points (picked 1000 points randomly) to calculate data distribution, as some features were visibly normal but Shapiro-Wilk test failed initially. Picked Kernel Density Estimation for the diagonal over a histogram for smoothing. 
 
 ## Data Preprocessing
@@ -101,6 +103,7 @@ The targets we had our model predict were: 'moneyLine', 'total', 'spread', 'seco
 as these will all be important aspects of betting that occur for the given game.
 
 ![image](https://github.com/Char1iee/NBA_Odds_Analysis/assets/86756673/deb18a34-3e59-42c8-a6b2-9bd73c7565c5)
+
 **Fig. 3 | Sample Output.** This is an example output of our model2. It contains predictions for all of our targets.
 
 ## Models
@@ -117,6 +120,9 @@ For this model, we essentially use an RNN to generate a rich encoding of each te
 While our labels and loss function still worked well for our second model, we had to somewhat change our data to take full advantage of the RNN's capability to work with time-series data. Essentially, instead of recording the current game's details (such as day of week, month, and one-hot encodings of which teams are playing), we pass in the details of the last k games played for each team, including the result of that game (so for a single game, we might have: day of week, one-hot encoding of opponent team, final score). This allows the RNN to find out how well the team has done recently, and use that to predict how well each team will do in the current game.
 
 After performing hyperparameter tuning, the final parameters that yielded these results had a mix of different activation functions, and an RNN input sequence length of 3, meaning that only the past 3 games (from this season) for each team was considered. We did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
+
+<img src = "https://github.com/Char1iee/NBA_Odds_Analysis/assets/156863651/ad9fab9b-0c37-4d15-ad21-5380db339ec8" width = "500"/>
+
 
 ### Model 3: Convolutional Neural Network
 For this model, we used the same input data as we did for the recurrent neural network - namely the past k games played by each participating team. A 1D convolution was performed for each feature over these k games to detect patterns in a given feature in the last k games, then this data was passed into a few dense layers to generate our final predictions.
