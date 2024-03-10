@@ -238,17 +238,10 @@ For this test prediction, both moneyLine and spread are extremely close to the a
 
 ### Conclusion
 
-- preprocessing: further feature expansion (polynomial)
-- model selection: maybe one with recurrent and conv layers?
-- more recurrent layers in RNN rather than 1
-- LSTMs and transformers instead of recurrent layer
-- more extensive HP tuning, ideally testing ~100 model variations
-- more models (potentially SARIMA)
-To improve our results, we can pursue further feature expansion by looking to incorporate polynomial features. With more time, we can also consider testing a few other models, like the SARIMA model mentioned above and 
+To improve our results, we can pursue further feature expansion by looking to incorporate polynomial features. With more time, we can also consider testing a few other models, like the SARIMA model mentioned above and possibly a neural network incorporating both recurrent and convolutional layers. The RNN model itself can also be improved with testing more recurrent layers or incorporating long short term memory (LSTMs) and transformers instead of a recurrent layer. Finally, with more time, we would ideally perform more extensive hyperparameter tuning, testing around 100 model variations on top of the 20 we did.
 
-- important feature that improved model performance in RNN and CNN: passing in data from previous games
-- exciting to see CNN appplied to non-image data
-- from intro: we achieved our initial goal by predicting the money line well
-- 
+Throughout this project, we learned that our RNN and CNN performance drastically improved over the ANN, and one reason to explain this is the fact that we passed in data from previous games to the model to aid in the predictions. Additionally, it was exciting to apply convolutional neural networks to 1-dimensional time-series data, as we had only covered CNNs in the scope of image processing. All in all, we achieved our initial goal, as our models predicted the money line of a game well. Based on our model, we proved that the money line is the most deterministic feature, and can be predicted at a high level of confidence with deep learning models. On the other hand, the score is much harder to predict, which implies that money line betting is lower risk than points-spread betting.
+
+Since the money line makes up a large part of the sports betting process, we can try to apply a similar framework to other sports and leagues, and see if our hypothesis holds or if the money line's impact varies by sport. 
 
 ### Collaboration
