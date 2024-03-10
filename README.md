@@ -135,7 +135,7 @@ After completing hyperparameter tuning by doing a randomized search of 20 trials
 #### Analysis of train loss, val loss, and test loss
 For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, test loss was less than train loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
 
-##### Train, Val, and Test prediction analysis
+#### Train, Val, and Test prediction analysis
 Training prediction:
 
 ![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
