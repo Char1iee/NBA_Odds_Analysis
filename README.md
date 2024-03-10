@@ -105,41 +105,11 @@ as these will all be important aspects of betting that occur for the given game.
 
 ## Models
 
-### Next 2 Models
-One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
-series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
-of each team, which could then be used for the final prediction step. The benefit of doing this over a traditional NN is that it will
-be better equipped to handle how each team changes over time, and be better able to predict how that team will be for a timestep that
-hasn't been seen before, which is what our current test set is composed of.
-
 ### Model 1: Neural Network
 
-We chose a neural network because it can calculate relationships between features easily. A neural network is the most basic and serves as a "control", and later can serve as a foundation for our RNN. We decided 
+We chose a neural network because it can calculate relationships between features easily. A neural network is the most basic and serves as a "control", and later can serve as a foundation for our RNN. We decided to use two layers with the relu activation function in order to avoid vanishing gradients (a known issue with sigmoid, etc.) and because it is less computationally expensive. Since we are doing a simple artificial neural network instead of a recurrent or convolutional NN, we used dense layers. For loss, we chose MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. We chose Adam optimzer because from our experience (trying different optimizers in our homework), it gives us the best performance. We also looked online and Adam consistently outperformed other optimizers [Source](https://towardsdatascience.com/optimizers-for-training-neural-network-59450d71caf6). We decided on a patience level of 2 for the early stopping to give the model 2 epochs to improve performance before the training stopped. We tested patience values of 0, 1, and 2, and ultimately decided that 2 was the optimal value. We chose a larger epoch value of 100 to ensure that the early stopping of our model training will take effect. We kept our testing size to be 30% of the dataset and the validation size to be 20% of our training data, as they are common values for the splits and we wanted to keep them consistent when testing other models.
 
-decisions:
--activation functions
--number of units
--types of layers 
--patience level 2
--epochs
--test size
--Chose Adam optimzer because from our experience (trying different optimizers in our homework), it gives us the best performance. We also looked online and Adam consistently outperformed other optimizers [Source](https://towardsdatascience.com/optimizers-for-training-neural-network-59450d71caf6)
-  
--MSE loss
-
-
-#### Performance of our 1st model:
-We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
-
-
-#### Where does our model fit in the fitting graph:
-Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
-
-![Train_Val_Loss](train_val_loss.png)
-
-
-#### Conclusion
-Our first model was kept pretty simple. We used two layers with the relu activation function in order to avoid vanishing gradients. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
+![image](https://github.com/Char1iee/NBA_Odds_Analysis/assets/156863651/8081ecf7-6b82-422c-9f29-41e9c900c7f5)
 
 ### Model 2: Recurrent Neural Network
 For this model, we essentially use an RNN to generate a rich encoding of each team in the current game by passing in the details and results of their last k games. We then use the rich encodings of the home and opponent teams as the inputs for a few dense layers, which gives us our final predictions.
@@ -147,28 +117,8 @@ For this model, we essentially use an RNN to generate a rich encoding of each te
 #### Evaluation of data, labels, and loss.
 While our labels and loss function still worked well for our second model, we had to somewhat change our data to take full advantage of the RNN's capability to work with time-series data. Essentially, instead of recording the current game's details (such as day of week, month, and one-hot encodings of which teams are playing), we pass in the details of the last k games played for each team, including the result of that game (so for a single game, we might have: day of week, one-hot encoding of opponent team, final score). This allows the RNN to find out how well the team has done recently, and use that to predict how well each team will do in the current game.
 
-#### Training vs Test Error
-Our final training error (MSE) was 0.1288, and our final test error was 0.1595. The test error is higher than the training error as expected, since it is much more likely for the model to perform better with data that it has seen before. Compared to model 1's training error of 0.1360 and test error of 0.2536, model 2 performed significantly better. Out of the 5 prediction targets, moneyLine again had the lowest error (train, val, and test) while score again had the highest error (train, val, and test). This is most likely due to the same reasons as before, where score was standardized rather than normalized, making it have a much larger range, and moneyLine is both more predictable and more clustered around the center.
-
-#### Fitting graph
-Our model started overfitting around the 65th epoch, prompting our early stopping to stop the model early. This trend is also visible on the graph, as the continued decrease in both training and validation losses stopped shortly before epoch 65, when only the training loss started decreasing and the validation loss started slightly increasing. Compared to the first model, which did start overfitting in the first few epochs, our 2nd model only started overfitting after many more epochs.
-
-![Train_Val_Loss](model2_history.png)
-
 #### Hyperparameter tuning, K-fold cross-validation, etc.
-After completing hyperparameter tuning by doing a randomized search of 20 trials, we were able to reduce the validation MSE from 0.1454 to 0.1427. Interestingly, the training error increased from 0.1245 to 0.1288, but this may be attributable to the tuned model being more generalized. The final parameters that yielded these results had a mix of different activation functions, and an RNN input sequence length of 3, meaning that only the past 3 games (from this season) for each team was considered. We did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
-
-#### Next model
-For our next model, we plan on using a Convolutional Neural Network that convolves over the same feature for the previous k games played by each team. This model will function somewhat similarly to the RNN, using the past k games for each team to create some kind of rich encoding of that team's recent history, and using those encodings to make our final predictions through a few dense layers. We switched to this model instead of the SARIMA model that we were planning on using because ultimately we wanted to explore models that were more relevant to this course, and because we believed that the Convolutional layers might be able to capture unique patterns that may not simply be a moving average (which a SARIMA would rely on).
-
-#### Analysis of train loss, val loss, and test loss
-For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, train loss was less than test loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
-
-#### Conclusion
-Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
-
-#### Train, Val, and Test prediction analysis
-#TODO
+The final parameters that yielded these results had a mix of different activation functions, and an RNN input sequence length of 3, meaning that only the past 3 games (from this season) for each team was considered. We did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
 
 ### Model 3: Convolutional Neural Network
 For this model, we used the same input data as we did for the recurrent neural network - namely the past k games played by each participating team. A 1D convolution was performed for each feature over these k games to detect patterns in a given feature in the last k games, then this data was passed into a few dense layers to generate our final predictions.
@@ -176,28 +126,37 @@ For this model, we used the same input data as we did for the recurrent neural n
 #### Evaluation of data, labels, and loss.
 For the convolutional neural network, our loss and labels were the same as the RNN model, as it had worked well in the past and we wanted to keep our data consistent. However, we had to reshape our data in order to feed it into the CNN, which included transposing the team and opponent matrices.
 
-#### Training vs Test Error
-Our final average training mse was 0.1262 and our final average test mse was 0.1604. The test error is higher than the training error which is expected because the model tends to perform better on data that it is familiar with. This model's error values were much closer to model 2's error values than model 1's. Once again moneyline had the lowest error for each data set and score had a significantly higher error than the other outputs. This is likely due to the same reasons that we sited prior where score was standardized rather than normalized and thus has a larger range and moneyline is more predictable and more clustered around the center. While the final average training mse of model 3 is 0.1262 and the average of model 2 is 0.1871, it is notable to remove the outlier (score) from the mean. When removed, the average train error of model 3 is 0.003763 and the average train error of model 2 is 0.005597. Likewise, the final average testing mse of model 3 is 0.1604 and the average of model 2 is 0.1595, but, when the outlier is removed from the average, the average test error of model 3 is 0.005657 and the average test error of model 2 is 0.006987.
-
-#### Fitting graph
-Our model started overfitting around the 175 epoch where our early stopping is triggered to stop the training. According to the graph below, the training loss and validation loss are gradually decreasing and do not show a sign of increasing even after many epochs. The early stopping is triggered by the validation loss not changing for two epochs. Compared to our first model, this model has a more fluent training and validation process and does not show overfitting. Compared to our second model, this model triggers early stopping at a much later epoch, has a longer training and validation process, and does not show a sign of overfitting. 
-
-![Train_Val_Loss](model3_history.png)
-
-#### Hyperparameter tuning, K-fold cross-validation, etc.
-Hyperparameter tuning (via 20 randomized search trials) yielded very surprising results on this model. More specifically, there was an incredibly high variation in validation loss across different sets of hyperparameters. This may be due to the fact our model only captures the dataset well with certain ranges of hyperparameters, as otherwise it would be too unnecessarily complex to capture the relevant data without overfitting. The final set of hyperparameters had the model consider only the last 3 games for each team, and only convolve across every pair of consectuive games (kernel_size = 2). The convolutional layer used 32 filters and a tanh activation function, while both dense layers had a linear activation function. The training MSE was 0.1262 and the validation MSE was 0.1417, which were both lower than the untuned training loss of 0.1794 and validation loss of 0.2180. Again, this drastic improvement highlights how much hyperparameter tuning did for the CNN model. Same as for the RNN, we did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
-
-#### Next model
-
-
-#### Analysis of train loss, val loss, and test loss
-
-
 #### Conclusion
 Overall, the CNN model surpassed the previous two models, demonstrating low error rates and high accuracy in predicting most features. It recorded a training MSE of 0.1262 and a validation MSE of 0.1417, marking a significant improvement over both the first and second models. For this model, we applied a convolution operation to each feature column of the team and opponent data individually which leverages the power of convolutional layers to process multiple features in a more efficient way. To improve this model, we may apply k-fold cross-validation into our model evaluation process, which can significantly enhance the reliability of our performance metrics.
 
+#### Hyperparameter tuning, K-fold cross-validation, etc.
+Hyperparameter tuning (via 20 randomized search trials) yielded very surprising results on this model. More specifically, there was an incredibly high variation in validation loss across different sets of hyperparameters. This may be due to the fact our model only captures the dataset well with certain ranges of hyperparameters, as otherwise it would be too unnecessarily complex to capture the relevant data without overfitting. The final set of hyperparameters had the model consider only the last 3 games for each team, and only convolve across every pair of consectuive games (kernel_size = 2). The convolutional layer used 32 filters and a tanh activation function, while both dense layers had a linear activation function. Same as for the RNN, we did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
 
-#### Train, Val, and Test prediction analysis
+
+### Results
+
+#### Performance of our 1st model (ANN):
+Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected. Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
+
+![Train_Val_Loss](train_val_loss.png)
+
+#### Performance of our 2nd model (RNN):
+Our final training error (MSE) was 0.1288, and our final test error was 0.1595. The test error is higher than the training error as expected, since it is much more likely for the model to perform better with data that it has seen before. Compared to model 1's training error of 0.1360 and test error of 0.2536, model 2 performed significantly better. Out of the 5 prediction targets, moneyLine again had the lowest error (train, val, and test) while score again had the highest error (train, val, and test). This is most likely due to the same reasons as before, where score was standardized rather than normalized, making it have a much larger range, and moneyLine is both more predictable and more clustered around the center. Our model started overfitting around the 65th epoch, prompting our early stopping to stop the model early. This trend is also visible on the graph, as the continued decrease in both training and validation losses stopped shortly before epoch 65, when only the training loss started decreasing and the validation loss started slightly increasing. Compared to the first model, which did start overfitting in the first few epochs, our 2nd model only started overfitting after many more epochs.
+
+![Train_Val_Loss](model2_history.png)
+
+##### Hyperparameter tuning, K-fold cross-validation, etc.
+After completing hyperparameter tuning by doing a randomized search of 20 trials, we were able to reduce the validation MSE from 0.1454 to 0.1427. Interestingly, the training error increased from 0.1245 to 0.1288, but this may be attributable to the tuned model being more generalized.
+
+#### Performance of our 3rd model (CNN):
+Our final average training mse was 0.1262 and our final average test mse was 0.1604. The test error is higher than the training error which is expected because the model tends to perform better on data that it is familiar with. This model's error values were much closer to model 2's error values than model 1's. Once again moneyline had the lowest error for each data set and score had a significantly higher error than the other outputs. This is likely due to the same reasons that we sited prior where score was standardized rather than normalized and thus has a larger range and moneyline is more predictable and more clustered around the center. While the final average training mse of model 3 is 0.1262 and the average of model 2 is 0.1871, it is notable to remove the outlier (score) from the mean. When removed, the average train error of model 3 is 0.003763 and the average train error of model 2 is 0.005597. Likewise, the final average testing mse of model 3 is 0.1604 and the average of model 2 is 0.1595, but, when the outlier is removed from the average, the average test error of model 3 is 0.005657 and the average test error of model 2 is 0.006987. Our model started overfitting around the 175 epoch where our early stopping is triggered to stop the training. According to the graph below, the training loss and validation loss are gradually decreasing and do not show a sign of increasing even after many epochs. The early stopping is triggered by the validation loss not changing for two epochs. Compared to our first model, this model has a more fluent training and validation process and does not show overfitting. Compared to our second model, this model triggers early stopping at a much later epoch, has a longer training and validation process, and does not show a sign of overfitting. 
+
+![Train_Val_Loss](model3_history.png)
+
+##### Hyperparameter tuning, K-fold cross-validation, etc.
+The training MSE was 0.1262 and the validation MSE was 0.1417, which were both lower than the untuned training loss of 0.1794 and validation loss of 0.2180. Again, this drastic improvement highlights how much hyperparameter tuning did for the CNN model.
+
+##### Train, Val, and Test prediction analysis
 Training prediction:
 
 <img width="536" alt="Screenshot 2024-03-07 at 11 37 45 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/d2b578be-0fcc-4826-97c7-2b238b9504f7">
@@ -216,13 +175,30 @@ Test prediction:
 
 For this test prediction, both moneyLine and spread are extremely close to the actual values (<0.01 away), while total and secondHalfTotal are also quite well predicted (0.02 and 0.08 off respectively). Score is actually somewhat close to the actual value this time at <0.3 away.
 
-Analysis:
-
-Overall, it is clear that moneyLine is consistently well predicted, and so are spread, total, and secondHalfTotal, which is consistent with the low MSEs that we calculated. Score, on the other hand, seems to be consistently close to 0, which by definition of standardization, is the mean of the data. This suggests that our model might lack variance when predicting score, choosing instead to predict the 'safe' values which are close to the center of the data. This further explains why the MSE of score was so much higher than the other prediction targets even considering their different scaling techniques. The individual samples that we selected this time from the training, valid, and test sets did not necessarily reflect how well the sets were predicted overall (since we only looked at so few samples), but the general relationship between how well each of our prediction targets were predicted did manifest.
-
 
 ### Discussion
-Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integrated Moving Average). This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We chose the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but like month or day of week for example), which we hoped this variant would be able to capture. We instead chose to do a CNN to focus on the models discussed in-class
+#### Model 1 (ANN):
+Our first model was kept pretty simple. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
+
+##### Next 2 Models
+One of the next models that we're thinking of building is the RNN. This is due to the fact that our data can be interpreted as a time
+series, where we want to predict the next point in the series. In this case, an RNN would be able to generate a robust representation
+of each team, which could then be used for the final prediction step. The benefit of doing this over a traditional NN is that it will
+be better equipped to handle how each team changes over time, and be better able to predict how that team will be for a timestep that
+hasn't been seen before, which is what our current test set is composed of.
+
+#### Model 2 (RNN):
+##### Analysis of train loss, val loss, and test loss
+For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, train loss was less than test loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
+
+##### Conclusion
+Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
+
+##### Next model
+For our next model, we plan on using a Convolutional Neural Network that convolves over the same feature for the previous k games played by each team. This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We were interested in the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but month or day of weekm for example), which we hoped this variant would be able to capture. This model will function somewhat similarly to the RNN, using the past k games for each team to create some kind of rich encoding of that team's recent history, and using those encodings to make our final predictions through a few dense layers. We switched to a CNN instead of the SARIMA model that we were planning on using because ultimately we wanted to explore models that were more relevant to this course, and because we believed that the Convolutional layers might be able to capture unique patterns that may not simply be a moving average (which a SARIMA would rely on).
+
+#### Model 3 (CNN):
+Overall, it is clear that moneyLine is consistently well predicted, and so are spread, total, and secondHalfTotal, which is consistent with the low MSEs that we calculated. Score, on the other hand, seems to be consistently close to 0, which by definition of standardization, is the mean of the data. This suggests that our model might lack variance when predicting score, choosing instead to predict the 'safe' values which are close to the center of the data. This further explains why the MSE of score was so much higher than the other prediction targets even considering their different scaling techniques. The individual samples that we selected this time from the training, valid, and test sets did not necessarily reflect how well the sets were predicted overall (since we only looked at so few samples), but the general relationship between how well each of our prediction targets were predicted did manifest.
 
 ### Collaboration
 
