@@ -189,7 +189,7 @@ For all predictions targets except moneyLine, our train loss was less than our v
 
 Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
-##### Train, Val, and Test prediction analysis
+#### Train, Val, and Test prediction analysis
 Training prediction:
 
 ![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
