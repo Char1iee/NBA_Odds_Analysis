@@ -1,11 +1,3 @@
-# Introduction
-
-In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and therefore correlate the value of those bets to public sentiment. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
-
-## Source
-For our project we will use this kaggle repo as our data source:
-https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
-
 # NBA_Odds_Analysis
 -link to notebook
 -story behind data, previous work
@@ -17,7 +9,19 @@ https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
 -possible future follow ups
 -list of group members and contributions
 
-## data description
+# Introduction
+
+In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and therefore correlate the value of those bets to public sentiment. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
+
+## Source
+For our project we will use this kaggle repo as our data source:
+https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
+
+# Method
+
+## Data Exploration
+
+### Data Description
 
 **date:** The date on which the game took place
 
@@ -42,7 +46,7 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 **secondHalfTotal:** The same as total except that this bet only calculates points in the second half of the game.
 
-## Data distributions - interpretation:
+### Data distributions - interpretation:
 
 **season:** The data that we have goes from the 2008 season to the 2023 season, and is roughly evenly distributed to have the same number of games per season. This makes sense since the number of games played each season should be pretty similar if no rule changes were made.
 
@@ -60,7 +64,7 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 **secondHalfTotal:** Just like total, secondHalfTotal has an almost normal distribution ranged from 84 to 125, which is nearly half of the minimum and maximum of total because the points added together from both teams for the first half of the game should be roughly equal to the one from the second half.
 
-## Data Visualization
+### Data Visualization
 
 
 ![Heat Map](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/heatmap.png)
