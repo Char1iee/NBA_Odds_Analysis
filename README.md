@@ -255,3 +255,5 @@ Chris Mo: Wrote preliminary write ups for preprocessing, prepared the final subm
 Alejandro Martinez: Data preprocessing (statistics portion), initial model 3 (CNN) attempt, pre-model 2 final writeup
 
 Andrei Secor: Data preprocessing, experimentation with different features
+
+Kris Chen: Data Visualization, data preprocessing, provides programming insights on model 2, wrote some of model 3 write-up.
