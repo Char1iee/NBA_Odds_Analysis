@@ -253,3 +253,5 @@ Shree Venkatesh: Selected the dataset, wrote most of the Data descriptions and D
 Chris Mo: Wrote preliminary write ups for preprocessing, prepared the final submission write up (organized readme entries from previous milestones, wrote the conclusion). Also started the preliminary model for model 3 (CNN) and provided programming insight for our first model (ANN).
 
 Alejandro Martinez: Data preprocessing (statistics portion), initial model 3 (CNN) attempt, pre-model 2 final writeup
+
+Andrei Secor: Data preprocessing, experimentation with different features
