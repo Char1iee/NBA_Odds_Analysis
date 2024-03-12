@@ -247,6 +247,8 @@ Alejandro Martinez: Data preprocessing (statistics portion), initial model 3 (CN
 
 Andrei Secor: Data preprocessing, experimentation with different features
 
+Beijie Cheng: Data preprocessing. Helped with initializing data and building model 3.
+
 Kris Chen: Data Visualization, data preprocessing, provides programming insights on model 2, wrote some of model 3 write-up.
 
 Charlie Shang: Selected the dataset, part of data exploration and data preprocessing, most of the code for model 1, part of write up for data exploration, data preprocessing, model1, model2, part of code for model2, organized half of the final writeup
