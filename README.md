@@ -1,14 +1,19 @@
 # NBA_Odds_Analysis
 
-## Introduction
+# Introduction
+
 
 In the area of sports analysis, betting odds, especially the money line, can be interpreted as an indicator of the public sentiment of the game they are watching. A high money line of a team suggests that the public does not have a positive attitude towards their chance of winning. On the contrary, a low money line represents the high likelihood of winning in the public’s perspective. Our objective is to be able to predict the moneyline, total, spread, second-half total, and score for games, and thereby get an idea of which team is favored in a given game and to what extent. Although we do not directly predict if a team is going to win, if we predict that the money line is heavily skewed it can be interpreted as a high confidence that the team will win. Therefore, this study on the dataset about the NBA Odds aims to develop NN, RNN, and CNN machine learning models that centers on exploring the public attitude in the context of NBA games using the existing quantized data. The models produced are useful for predicting the money line of future NBA games and thus understanding how the public perceives team strengths and how the house (fairly or unfairly) translates those perceptions into betting odds.
 
 ## Source
 For our project we will use this kaggle repo as our data source:
-[Dataset Link](https://www.kaggle.com/datasets/christophertreasure/nba-odds-data)
+https://www.kaggle.com/datasets/christophertreasure/nba-odds-data
 
-## data description
+# Method
+
+## Data Exploration
+
+### Data Description
 
 **date:** The date on which the game took place
 
@@ -33,7 +38,7 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 **secondHalfTotal:** The same as total except that this bet only calculates points in the second half of the game.
 
-## Data distributions - interpretation:
+### Data distributions - interpretation:
 
 **season:** The data that we have goes from the 2008 season to the 2023 season, and is roughly evenly distributed to have the same number of games per season. This makes sense since the number of games played each season should be pretty similar if no rule changes were made.
 
@@ -51,7 +56,7 @@ The simplest type of bet; if your team wins, you win the bet, no matter by how m
 
 **secondHalfTotal:** Just like total, secondHalfTotal has an almost normal distribution ranged from 84 to 125, which is nearly half of the minimum and maximum of total because the points added together from both teams for the first half of the game should be roughly equal to the one from the second half.
 
-## Data Visualization
+### Data Visualization
 
 
 ![Heat Map](https://github.com/Char1iee/NBA_Odds_Analysis/blob/main/heatmap.png)
@@ -97,13 +102,51 @@ as these will all be important aspects of betting that occur for the given game.
 
 ### Model 1: Neural Network
 
-#### Performance of our 1st model:
-We use MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected.
+We chose a neural network because it can calculate relationships between features easily. A neural network is the most basic and serves as a "control", and later can serve as a foundation for our RNN. We decided to use two layers with the relu activation function in order to avoid vanishing gradients (a known issue with sigmoid, etc.) and because it is less computationally expensive. Since we are doing a simple artificial neural network instead of a recurrent or convolutional NN, we used dense layers. For loss, we chose MSE(mean squared error) as the loss function for our model since we are predicting different values and doing a regression task instead of classification. We chose Adam optimzer because from our experience (trying different optimizers in our homework), it gives us the best performance. We also looked online and Adam consistently outperformed other optimizers [Source](https://towardsdatascience.com/optimizers-for-training-neural-network-59450d71caf6). We decided on a patience level of 2 for the early stopping to give the model 2 epochs to improve performance before the training stopped. We tested patience values of 0, 1, and 2, and ultimately decided that 2 was the optimal value. We chose a larger epoch value of 100 to ensure that the early stopping of our model training will take effect. We kept our testing size to be 30% of the dataset and the validation size to be 20% of our training data, as they are common values for the splits and we wanted to keep them consistent when testing other models.
 
-#### Where does our model fit in the fitting graph:
-Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
+![image](https://github.com/Char1iee/NBA_Odds_Analysis/assets/156863651/8081ecf7-6b82-422c-9f29-41e9c900c7f5)
+
+### Model 2: Recurrent Neural Network
+For this model, we essentially use an RNN to generate a rich encoding of each team in the current game by passing in the details and results of their last k games. We then use the rich encodings of the home and opponent teams as the inputs for a few dense layers, which gives us our final predictions. 
+
+While our labels and loss function still worked well for our second model, we had to somewhat change our data to take full advantage of the RNN's capability to work with time-series data. Essentially, instead of recording the current game's details (such as day of week, month, and one-hot encodings of which teams are playing), we pass in the details of the last k games played for each team, including the result of that game (so for a single game, we might have: day of week, one-hot encoding of opponent team, final score). This allows the RNN to find out how well the team has done recently, and use that to predict how well each team will do in the current game.
+
+After performing hyperparameter tuning, the final parameters that yielded these results had a mix of different activation functions, and an RNN input sequence length of 3, meaning that only the past 3 games (from this season) for each team was considered. We did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
+
+<img src = "https://github.com/Char1iee/NBA_Odds_Analysis/assets/156863651/ad9fab9b-0c37-4d15-ad21-5380db339ec8" width = "500"/>
+
+
+### Model 3: Convolutional Neural Network
+For this model, we used the same input data as we did for the recurrent neural network - namely the past k games played by each participating team. A 1D convolution was performed for each feature over these k games to detect patterns in a given feature in the last k games, then this data was passed into a few dense layers to generate our final predictions.
+
+For the convolutional neural network, our loss and labels were the same as the RNN model, as it had worked well in the past and we wanted to keep our data consistent. However, we had to reshape our data in order to feed it into the CNN, which included transposing the team and opponent matrices.
+
+Hyperparameter tuning (via 20 randomized search trials) yielded very surprising results on this model. More specifically, there was an incredibly high variation in validation loss across different sets of hyperparameters. This may be due to the fact our model only captures the dataset well with certain ranges of hyperparameters, as otherwise it would be too unnecessarily complex to capture the relevant data without overfitting. The final set of hyperparameters had the model consider only the last 3 games for each team, and only convolve across every pair of consectuive games (kernel_size = 2). The convolutional layer used 32 filters and a tanh activation function, while both dense layers had a linear activation function. Same as for the RNN, we did not perform K-fold cross-validation during the random search as that would take multiple hours, and the only feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
+
+<img src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/156863651/d054ee47-f7d3-4297-8aee-04bb63e02562" width="400"/>
+
+
+## Results
+
+### Performance of our 1st model (ANN):
+Based on the calculated MSE of different target features we predicted, the results seem pretty good especially for moneyline because it has the lowest MSE. Our model does not predict the score column pretty well because the range of these columns is larger than the others and the scaling strategy we used for this column is standardization, unlike using MinMax normalization for the rest of columns. Based on the calculated MSE for training set, validation set, and testing set, training set has the lowest MSE for all features and testing set has the highest, which is expected. Based on the plot of training loss and validation loss versus epochs, our model fits when the training process reaches epoch 6, since at epoch 6, the difference between training loss and validation loss is the smallest and after this epoch, the difference starts to increase, which is not what we want.
 
 ![Train_Val_Loss](train_val_loss.png)
+
+### Performance of our 2nd model (RNN):
+After completing hyperparameter tuning by doing a randomized search of 20 trials, we were able to reduce the validation MSE from 0.1454 to 0.1427. Interestingly, the training error increased from 0.1245 to 0.1288, but this may be attributable to the tuned model being more generalized.
+
+![Train_Val_Loss](model2_history.png)
+
+### Performance of our 3rd model (CNN):
+The training MSE was 0.1262 and the validation MSE was 0.1417, which were both lower than the untuned training loss of 0.1794 and validation loss of 0.2180. Again, this drastic improvement highlights how much hyperparameter tuning did for the CNN model.
+
+![Train_Val_Loss](model3_history.png)
+
+
+## Discussion
+### Model 1 (ANN):
+Our first model was kept pretty simple. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
 
 #### Train, Val, and Test prediction analysis
 Training prediction:
@@ -131,35 +174,19 @@ of each team, which could then be used for the final prediction step. The benefi
 be better equipped to handle how each team changes over time, and be better able to predict how that team will be for a timestep that
 hasn't been seen before, which is what our current test set is composed of.
 
-#### Conclusion
-Our first model was kept pretty simple. We used two layers with the relu activation function in order to avoid vanishing gradients. Our model was very quick to early stop and was very good at predicting the moneyline and struggled at predicting the score. Possible improvements could be made by testing with more activation functions and optimizers.
+### Model 2 (RNN):
+Before hyperparameter tuning, our training error (MSE) was 0.1288, and our test error was 0.1595. The test error is higher than the training error as expected, since it is much more likely for the model to perform better with data that it has seen before. Compared to model 1's training error of 0.1360 and test error of 0.2536, model 2 performed significantly better. Out of the 5 prediction targets, moneyLine again had the lowest error (train, val, and test) while score again had the highest error (train, val, and test). This is most likely due to the same reasons as before, where score was standardized rather than normalized, making it have a much larger range, and moneyLine is both more predictable and more clustered around the center. Our model started overfitting around the 65th epoch, prompting our early stopping to stop the model early. This trend is also visible on the graph, as the continued decrease in both training and validation losses stopped shortly before epoch 65, when only the training loss started decreasing and the validation loss started slightly increasing. Compared to the first model, which did start overfitting in the first few epochs, our 2nd model only started overfitting after many more epochs. 
 
-### Model 2: Recurrent Neural Network
-For this model, we essentially use an RNN to generate a rich encoding of each team in the current game by passing in the details and results of their last k games. We then use the rich encodings of the home and opponent teams as the inputs for a few dense layers, which gives us our final predictions.
+For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, train loss was less than test loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
 
-#### Evaluation of data, labels, and loss.
-While our labels and loss function still worked well for our second model, we had to somewhat change our data to take full advantage of the RNN's capability to work with time-series data. Essentially, instead of recording the current game's details (such as day of week, month, and one-hot encodings of which teams are playing), we pass in the details of the last k games played for each team, including the result of that game (so for a single game, we might have: day of week, one-hot encoding of opponent team, final score). This allows the RNN to find out how well the team has done recently, and use that to predict how well each team will do in the current game.
-
-#### Training vs Test Error
-Our final training error (MSE) was 0.1284, and our final test error was 0.1604. The test error is higher than the training error as expected, since it is much more likely for the model to perform better with data that it has seen before. Compared to model 1's training error of 0.1360 and test error of 0.2536, model 2 performed significantly better. Out of the 5 prediction targets, moneyLine again had the lowest error (train, val, and test) while score again had the highest error (train, val, and test). This is most likely due to the same reasons as before, where score was standardized rather than normalized, making it have a much larger range, and moneyLine is both more predictable and more clustered around the center.
-
-#### Fitting graph
-Our model started overfitting around the 61th epoch, prompting our early stopping to stop the model early. This trend is also visible on the graph, as the continued decrease in both training and validation losses stopped shortly before epoch 61, when only the training loss started decreasing and the validation loss started slightly increasing. Compared to the first model, which did start overfitting in the first few epochs, our 2nd model only started overfitting after many more epochs.
-
-![Train_Val_Loss](model2_history.png)
-
-#### Hyperparameter tuning, K-fold cross-validation, etc.
-After completing hyperparameter tuning by doing a randomized search of 20 trials, we were able to reduce the validation MSE from 0.1454 to 0.1429. Interestingly, the training error increased from 0.1245 to 0.1284, but this may be attributable to the tuned model being more generalized. The final parameters that yielded these results had a mix of different activation functions, and an RNN input sequence length of 3, meaning that only the past 3 games (from this season) for each team was considered. We did not perform K-fold cross-validation during the random search as that would take multiple hours, and the feature expansion used for this model was taking the sin of date-related columns as specified in the data preprocessing section.
-
-#### Analysis of train loss, val loss, and test loss
-For all predictions targets except moneyLine, our train loss was less than our validation loss which was less than our test loss. For moneyLine, test loss was less than train loss which was less than val loss. This weird trend might be due to moneyLine being inherently predictable, or not well captured by our model structure. It might also be due to it's relatively low errors in general making not as important of a target to minimize for our model than our other targets, which all had higher errors in general. 
+Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
 #### Train, Val, and Test prediction analysis
 Training prediction:
 
 ![cnn_pred_train](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/4abc528a-3843-4563-be17-a734bed47aeb)
 
-For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation away).
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1.4 away (1.4 standard deviation).
 
 Validation prediction:
 
@@ -171,6 +198,36 @@ Test prediction:
 
 ![cnn_pred_test](https://github.com/Char1iee/NBA_Odds_Analysis/assets/47782807/6c106796-7a19-4d8e-9374-82a767080dec)
 
+For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time at <0.3 away.
+
+#### Next model
+For our next model, we plan on using a Convolutional Neural Network that convolves over the same feature for the previous k games played by each team. This model showed promise for the same reason as the RNN: it is built to account for changes/constants over time. We were interested in the seasonal variant of the base ARIMA because we suspected that teams would have varying performance based on seasonal changes (not the season variable but month or day of weekm for example), which we hoped this variant would be able to capture. This model will function somewhat similarly to the RNN, using the past k games for each team to create some kind of rich encoding of that team's recent history, and using those encodings to make our final predictions through a few dense layers. We switched to a CNN instead of the SARIMA model that we were planning on using because ultimately we wanted to explore models that were more relevant to this course, and because we believed that the Convolutional layers might be able to capture unique patterns that may not simply be a moving average (which a SARIMA would rely on).
+
+### Model 3 (CNN):
+Our final average training mse was 0.1262 and our final average test mse was 0.1604. The test error is higher than the training error which is expected because the model tends to perform better on data that it is familiar with. This model's error values were much closer to model 2's error values than model 1's. Once again moneyline had the lowest error for each data set and score had a significantly higher error than the other outputs. This is likely due to the same reasons that we sited prior where score was standardized rather than normalized and thus has a larger range and moneyline is more predictable and more clustered around the center. While the final average training mse of model 3 is 0.1262 and the average of model 2 is 0.1871, it is notable to remove the outlier (score) from the mean. When removed, the average train error of model 3 is 0.003763 and the average train error of model 2 is 0.005597. Likewise, the final average testing mse of model 3 is 0.1604 and the average of model 2 is 0.1595, but, when the outlier is removed from the average, the average test error of model 3 is 0.005657 and the average test error of model 2 is 0.006987. Our model started overfitting around the 175 epoch where our early stopping is triggered to stop the training. According to the graph below, the training loss and validation loss are gradually decreasing and do not show a sign of increasing even after many epochs. The early stopping is triggered by the validation loss not changing for two epochs. Compared to our first model, this model has a more fluent training and validation process and does not show overfitting. Compared to our second model, this model triggers early stopping at a much later epoch, has a longer training and validation process, and does not show a sign of overfitting. 
+
+Overall, the CNN model surpassed the previous two models, demonstrating low error rates and high accuracy in predicting most features. It recorded a training MSE of 0.1262 and a validation MSE of 0.1417, marking a significant improvement over both the first and second models. For this model, we applied a convolution operation to each feature column of the team and opponent data individually which leverages the power of convolutional layers to process multiple features in a more efficient way. To improve this model, we may apply k-fold cross-validation into our model evaluation process, which can significantly enhance the reliability of our performance metrics. It is clear that moneyLine is consistently well predicted, and so are spread, total, and secondHalfTotal, which is consistent with the low MSEs that we calculated. Score, on the other hand, seems to be consistently close to 0, which by definition of standardization, is the mean of the data. This suggests that our model might lack variance when predicting score, choosing instead to predict the 'safe' values which are close to the center of the data. This further explains why the MSE of score was so much higher than the other prediction targets even considering their different scaling techniques. The individual samples that we selected this time from the training, valid, and test sets did not necessarily reflect how well the sets were predicted overall (since we only looked at so few samples), but the general relationship between how well each of our prediction targets were predicted did manifest. 
+
+#### Train, Val, and Test prediction analysis
+Training prediction:
+
+<img width="536" alt="Screenshot 2024-03-07 at 11 37 45 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/d2b578be-0fcc-4826-97c7-2b238b9504f7">
+
+For the training prediction, we see that moneyLine and spread were very well predicted (within 0.01 of the actual values), total and secondHalfTotal were somewhat less well predicted (around 0.2 off from the true values), and score was the least well predicted, being almost 1 away (1 standard deviation).
+
+Validation prediction:
+
+<img width="539" alt="Screenshot 2024-03-07 at 11 40 59 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/f9bcf325-5a3b-47ef-ba94-49015b44615f">
+
+Here we see that total is the best predicted (0.02 away), while moneyLine, spread, and secondHalfTotal are the second best predicted (0.04 away), and score is again the least well predicted (0.66 stds away)
+
+Test prediction:
+
+<img width="528" alt="Screenshot 2024-03-07 at 11 43 24 PM" src="https://github.com/Char1iee/NBA_Odds_Analysis/assets/44252902/02c713fb-c81d-4dd0-9dde-9e47223380df">
+
+For this test prediction, both moneyLine and spread are extremely close to the actual values (<0.01 away), while total and secondHalfTotal are also quite well predicted (0.02 and 0.08 off respectively). Score is actually somewhat close to the actual value this time at <0.3 away.
+
+
 For this test prediction, moneyLine is extremely close to the actual values (<0.01 away), and secondHalfTotal is also quite well predicted (0.03 away). Total and spread are the third best predicted (about 0.1 away). Score is actually somewhat close to the actual value this time (<0.3 stds away).
 
 #### Next model
@@ -180,3 +237,28 @@ Initially, we wanted to try using is an SARIMA (Seasonal Auto-Regressive Integra
 #### Conclusion
 Overall, the errors for each of our prediction targets were lower than what we had for our first model, making the 2nd model a definite upgrade over the 1st model. The test error of 0.1595 was also significantly less than model 1's test error of 0.2536. We conclude that it has excellent predictive power, as signaled by its relatively lower losses for each prediction target. To further improve it, we could spend more time tuning the hyperparameters, or adding more RNN layers. We could also try expanding more of our features to see if that might help capture some previously unnoticed trends.
 
+To improve our results, we can pursue further feature expansion by looking to incorporate polynomial features. With more time, we can also consider testing a few other models, like the SARIMA model mentioned above and possibly a neural network incorporating both recurrent and convolutional layers. The RNN model itself can also be improved with testing more recurrent layers or incorporating long short term memory (LSTMs) and transformers instead of a recurrent layer. Finally, with more time, we would ideally perform more extensive hyperparameter tuning, testing around 100 model variations on top of the 20 we did.
+
+Throughout this project, we learned that our RNN and CNN performance drastically improved over the ANN, and one reason to explain this is the fact that we passed in data from previous games to the model to aid in the predictions. Additionally, it was exciting to apply convolutional neural networks to 1-dimensional time-series data, as we had only covered CNNs in the scope of image processing. All in all, we achieved our initial goal, as our models predicted the money line of a game well. Based on our model, we proved that the money line is the most deterministic feature, and can be predicted at a high level of confidence with deep learning models. On the other hand, the score is much harder to predict, which implies that money line betting is lower risk than points-spread betting.
+
+Since the money line makes up a large part of the sports betting process, we can try to apply a similar framework to other sports and leagues, and see if our hypothesis holds or if the money line's impact varies by sport. 
+
+### Collaboration
+
+Peter Gao: Managed meetings, programmed/trained models 2 and 3, wrote most of model 2 write-up.
+
+Shree Venkatesh: Selected the dataset, wrote most of the Data descriptions and Data distribution - Interpretation, worked on data preprocessing, mainly in feature selection.
+
+Chris Mo: Wrote preliminary write ups for preprocessing, prepared the final submission write up (organized readme entries from previous milestones, wrote the conclusion). Also started the preliminary model for model 3 (CNN) and provided programming insight for our first model (ANN).
+
+Alejandro Martinez: Data preprocessing (statistics portion), initial model 3 (CNN) attempt, pre-model 2 final writeup
+
+Andrei Secor: Data preprocessing, experimentation with different features
+
+Beijie Cheng: Data preprocessing. Helped with initializing data and building model 3.
+
+Kris Chen: Data Visualization, data preprocessing, provides programming insights on model 2, wrote some of model 3 write-up.
+
+Charlie Shang: Selected the dataset, part of data exploration and data preprocessing, most of the code for model 1, part of write up for data exploration, data preprocessing, model1, model2, part of code for model2, organized half of the final writeup
+
+Kara Hoagland: Selection of dataset, data exploration and preprocessing, model 1, and writeups for data exploration, preprocessing, model1, model3, and final writeup
